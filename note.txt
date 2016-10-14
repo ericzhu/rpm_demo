@@ -1,0 +1,124 @@
+A simple rpm which delivers a single file. It is simple distribution of a sigle file.
+
+Distribute a file through RPM.
+
+What we want to do is to distribute a repository file to the folder /etc/yum.repos.d/
+It is only a text file we don't worry about compiling code.
+
+
+Create a separate user to create the RPM
+
+1. switch to the root account
+$ su -
+
+2. create a rpm build account
+# useradd -m build
+# passwd build
+
+3. list package start with rpm
+# yum list rpm*
+
+4. install rpm build tools
+# yum install -y rpmdevtools rpm-build
+
+5. exit from the root
+
+6. login as build account
+
+7. create rpm dev fold structures
+$ rpmdev-setuptree
+
+8. verify recursively the rpm build folder structures
+$ ls -R 
+
+9. go to the SOURCES directory and create the necessary folders.
+$ mkdir -p tuprepo-1/etc/yum.repos.d
+
+10. copy the file to the designated folder
+$ copy file to tuprepo-1/etc/yum.repos.d
+
+11. zip the file that we want to distribute
+$ tar -cvzf tuprepo-1.tar.gz tuprepo-1
+
+12. Create spec file skeleton spec files
+$ rpmdev-newspec tuprepo.spec
+
+------ content start ------
+
+
+Name:           tuprepo
+Version:        1
+Release:        0
+Summary:        network repo for TUP CentOS Servers
+
+License:        GPL
+URL:            http://locahost
+Source0:        tuprepo-1.tar.gz
+BuildArch:      noarch
+BuildRoot:      %{_tmppath}/%{name}-buildroot
+
+%description
+Create a YUM repo file in the /etc/yum.repos.d/ folder
+
+%prep
+%setup -q
+
+%install
+mkdir -p "$RPM_BUILD_ROOT"
+cp -R * "$RPM_BUILD_ROOT"
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-, root, root, -)
+/etc/yum.repos.d/CentOS-Tup.repo
+
+
+------ content end   ------
+
+13. start build RPM
+
+$ rpmbuild -v -bb rpmbuild/SPECS/tuprepo.spec
+
+14. verify rpm
+$ rpm -qpl rpmbuild/RPMS/noarch/tuprepo-1-0.noarch.rpm
+
+
+15. switch to the super user, and install RPM
+
+$ su -
+$ rpm -i /home/build/rpmbuild/RPMS/noarch/tuprepo-1-0.noarch.rpm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
