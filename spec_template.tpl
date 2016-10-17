@@ -1,11 +1,11 @@
-Name:           tuprepo
+Name:           ${NAME}
 Version:        ${VERSION}
 Release:        0
 Summary:        network repo for TUP CentOS Servers
 
 License:        GPL
 URL:            http://locahost
-Source0:        tuprepo-1.tar.gz
+Source0:        ${SOURCE}
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-buildroot
 
